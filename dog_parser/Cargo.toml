@@ -1,0 +1,18 @@
+[package]
+name = "dog_parser"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+#glob = "0.3"
+#indexmap = "1"
+logos = "0.11.4"
+regex = "1"
+rowan = "0.10.0"
+#semver = { version = "0.11", features = ["serde"] }
+smallvec = "1"
+
+serde_crate = { package = "serde", version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }

@@ -1,5 +1,3 @@
-mod wasm;
-
 #[cfg(test)]
 mod tests {
     #[test]

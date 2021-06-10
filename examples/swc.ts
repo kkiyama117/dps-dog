@@ -27,5 +27,6 @@ let code = print(ast, {
     }
 });
 
-console.log(code.code);
+console.log(ast.type);
+console.log(ast.span);
 // const x: string = "Hello, Deno SWC!";

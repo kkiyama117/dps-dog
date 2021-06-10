@@ -1,4 +1,5 @@
-mod wasm;
+mod parser;
+mod syntax;
 
 #[cfg(test)]
 mod tests {
