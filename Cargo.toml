@@ -1,0 +1,20 @@
+[workspace]
+members = ["swc_vimdoc","dog_parser"]
+#members = ["swc_vimdoc","denops_types"]
+
+[package]
+name = "dps_dog"
+authors = ["kkiyama117 <k.kiyama117@gmail.com>"]
+version = "0.1.0"
+edition = "2018"
+license = "Apache-2.0/MIT"
+
+[lib]
+name = "dps_dog"
+
+[dependencies]
+deno_doc="0.5"
+futures="0.3"
+url = "2.2.1"
+swc_common = {version="0.10",features=["tty-emitter"]}
+swc_ecmascript = { version = "0.36", features = ["parser"] }
