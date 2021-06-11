@@ -1,4 +1,4 @@
-mod parser;
+mod swc_utils;
 mod syntax;
 
 #[cfg(test)]

@@ -13,6 +13,11 @@ regex = "1"
 rowan = "0.10.0"
 #semver = { version = "0.11", features = ["serde"] }
 smallvec = "1"
+deno_doc="0.5"
+futures="0.3"
+url = "2.2.1"
+swc_common = {version="0.10",features=["tty-emitter"]}
+swc_ecmascript = { version = "0.36", features = ["parser"] }
 
 serde_crate = { package = "serde", version = "1", features = ["derive"], optional = true }
 serde_json = { version = "1", optional = true }
