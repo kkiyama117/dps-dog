@@ -1,4 +1,5 @@
-mod swc_utils;
+mod parser;
+pub(crate) mod swc_utils;
 mod syntax;
 
 #[cfg(test)]

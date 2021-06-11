@@ -2,9 +2,8 @@
 import {
     ensureString,
     main,
-} from "https://deno.land/x/denops_std@v0.10/mod.ts";
-import {AutoCmdHelper} from "https://deno.land/x/denops_std@v0.14/vim/mod.ts";
-
+    AutoCmdHelper
+} from "https://deno.land/x/denops_std@v0.14/mod.ts";
 
 // Call 'main' with async callback. The callback get RunnerContext.
 main(async ({vim}) => {

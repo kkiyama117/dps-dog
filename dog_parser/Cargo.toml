@@ -6,6 +6,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+thiserror="1.0"
+
 #glob = "0.3"
 #indexmap = "1"
 logos = "0.11.4"
@@ -13,6 +15,7 @@ regex = "1"
 rowan = "0.10.0"
 #semver = { version = "0.11", features = ["serde"] }
 smallvec = "1"
+
 deno_doc="0.5"
 futures="0.3"
 url = "2.2.1"

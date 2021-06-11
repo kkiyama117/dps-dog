@@ -1,17 +1,16 @@
-use std::borrow::Borrow;
 use std::path::Path;
-use swc_common::comments::{Comment, CommentKind, Comments, SingleThreadedComments};
+use swc_common::comments::{CommentKind, Comments, SingleThreadedComments};
 use swc_common::{
     self,
     errors::{ColorConfig, Handler},
     sync::Lrc,
-    BytePos, FileName, SourceMap, Span, SyntaxContext,
+    BytePos, SourceMap, Span, SyntaxContext,
 };
 use swc_ecmascript::parser::{lexer::Lexer, Capturing, Parser, StringInput, Syntax};
 
 fn main() {
     let cm: Lrc<SourceMap> = Default::default();
-    let handler = Handler::with_tty_emitter(ColorConfig::Auto, true, false, Some(cm.clone()));
+    let handler = Handler::with_tty_emitter(ColorConfig::Always, true, false, Some(cm.clone()));
 
     // Real usage
     let fm = cm
