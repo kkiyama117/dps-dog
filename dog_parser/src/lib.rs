@@ -1,5 +1,5 @@
+pub(crate) mod ast_parser;
 mod parser;
-pub(crate) mod swc_utils;
 mod syntax;
 
 #[cfg(test)]

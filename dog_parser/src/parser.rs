@@ -2,7 +2,7 @@ use futures::future::LocalBoxFuture;
 use swc_ecmascript::parser::Syntax;
 use thiserror::Error;
 
-use crate::swc_utils;
+use crate::ast_parser;
 
 #[derive(Error, Debug)]
 pub enum DocError {
@@ -11,11 +11,11 @@ pub enum DocError {
     #[error("{0}")]
     Io(std::io::Error),
     #[error("{0}")]
-    Parse(swc_utils::SwcDiagnosticBuffer),
+    Parse(ast_parser::SwcDiagnosticBuffer),
 }
 
-impl From<swc_util::SwcDiagnosticBuffer> for DocError {
-    fn from(error: swc_util::SwcDiagnosticBuffer) -> DocError {
+impl From<ast_parser::SwcDiagnosticBuffer> for DocError {
+    fn from(error: ast_parser::SwcDiagnosticBuffer) -> DocError {
         DocError::Parse(error)
     }
 }

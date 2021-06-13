@@ -3,21 +3,32 @@
 // Copyright of original one is below.
 // Copyright 2020-2021 the Deno authors. All rights reserved. MIT license.
 
-use std::rc::Rc;
 use std::{
     borrow::Borrow,
     error::Error,
     fmt,
     path::Path,
+    rc::Rc,
     sync::{Arc, RwLock},
 };
 use swc_common::{
     self,
     comments::{Comment, CommentKind, Comments, SingleThreadedComments},
     errors::{ColorConfig, Diagnostic, DiagnosticBuilder, Emitter, Handler, HandlerFlags},
-    BytePos, FileName, Globals, SourceMap, Span, SyntaxContext,
+    BytePos, FileName, Globals, Mark, SourceMap, Span, SyntaxContext,
 };
-use swc_ecmascript::parser::{lexer::Lexer, Capturing, JscTarget, Parser, StringInput, Syntax};
+use swc_ecmascript::parser::{
+    lexer::Lexer, Capturing, JscTarget, Parser, StringInput, Syntax, TsConfig,
+};
+
+pub fn get_default_ts_config() -> Syntax {
+    let ts_config = TsConfig {
+        dynamic_import: true,
+        decorators: true,
+        ..Default::default()
+    };
+    Syntax::Typescript(ts_config)
+}
 
 #[derive(Clone, Debug)]
 pub struct SwcDiagnosticBuffer {
@@ -35,7 +46,8 @@ impl fmt::Display for SwcDiagnosticBuffer {
 }
 
 impl SwcDiagnosticBuffer {
-    pub fn from_swc_error(error_buffer: SwcErrorBuffer, parser: &AstParser) -> Self {
+    // TODO: check unwrap and Arc are better than Rc
+    pub(crate) fn from_swc_error(error_buffer: SwcErrorBuffer, parser: &AstParser) -> Self {
         let s = error_buffer.0.read().unwrap().clone();
 
         let diagnostics = s
@@ -82,16 +94,20 @@ impl Emitter for SwcErrorBuffer {
 ///
 /// Allows to build more complicated parser by providing a callback
 /// to `parse_module`.
-pub struct ASTParser {
+pub struct AstParser {
     pub buffered_error: SwcErrorBuffer,
     pub source_map: Rc<SourceMap>,
     pub handler: Handler,
     pub comments: SingleThreadedComments,
     pub globals: Globals,
+    /// The marker passed to the resolver (from swc).
+    ///
+    /// This mark is applied to top level bindings and unresolved references.
+    pub(crate) top_level_mark: Mark,
 }
 
 impl AstParser {
-    pub fn default() -> Self {
+    pub(crate) fn new() -> Self {
         let buffered_error = SwcErrorBuffer::default();
 
         let handler = Handler::with_emitter_and_flags(
@@ -103,12 +119,16 @@ impl AstParser {
             },
         );
 
+        let globals = Globals::new();
+        let top_level_mark = swc_common::GLOBALS.set(&globals, || Mark::fresh(Mark::root()))
+
         AstParser {
             buffered_error,
             source_map: Rc::new(SourceMap::default()),
             handler,
             comments: SingleThreadedComments::default(),
-            globals: Globals::new(),
+            globals,
+            top_level_mark,
         }
     }
 
