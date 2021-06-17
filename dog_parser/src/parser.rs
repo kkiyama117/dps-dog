@@ -3,6 +3,7 @@ use swc_ecmascript::parser::Syntax;
 use thiserror::Error;
 
 use crate::ast_parser;
+use crate::ast_parser::SWC;
 
 #[derive(Error, Debug)]
 pub enum DocError {
@@ -42,7 +43,7 @@ struct Import {
 }
 
 pub struct DocParser {
-    pub ast_parser: AstParser,
+    pub ast_parser: SWC,
     pub loader: Box<dyn DocFileLoader>,
     pub private: bool,
 }

@@ -97,9 +97,9 @@ main(async ({ vim }) => {
   // Use 'vim.execute()' to execute Vim script
   /// [Denops]
   /// Adds x and y.
-  //  @param {number} x
-  //  @param {number} y
-  //  @returns {number} x と y の加算
+  ///  @param {number} x
+  ///  @param {number} y
+  ///  @returns {number} x と y の加算
   await vim.execute(`
     command! HelloWorld call denops#notify("${vim.name}", "say", ["World"])
     command! HelloDenops call denops#notify("${vim.name}", "say", ["Denops"])

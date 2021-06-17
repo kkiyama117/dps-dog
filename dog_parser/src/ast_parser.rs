@@ -1,8 +1,3 @@
-// This module is based from `deno_doc::swc_utils`.
-//
-// Copyright of original one is below.
-// Copyright 2020-2021 the Deno authors. All rights reserved. MIT license.
-
 use std::{
     borrow::Borrow,
     error::Error,
@@ -47,7 +42,7 @@ impl fmt::Display for SwcDiagnosticBuffer {
 
 impl SwcDiagnosticBuffer {
     // TODO: check unwrap and Arc are better than Rc
-    pub(crate) fn from_swc_error(error_buffer: SwcErrorBuffer, parser: &AstParser) -> Self {
+    pub(crate) fn from_swc_error(error_buffer: SwcErrorBuffer, parser: &SWC) -> Self {
         let s = error_buffer.0.read().unwrap().clone();
 
         let diagnostics = s
@@ -75,26 +70,7 @@ impl SwcDiagnosticBuffer {
     }
 }
 
-#[derive(Clone)]
-pub struct SwcErrorBuffer(Arc<RwLock<Vec<Diagnostic>>>);
-
-impl SwcErrorBuffer {
-    pub fn default() -> Self {
-        Self(Arc::new(RwLock::new(vec![])))
-    }
-}
-
-impl Emitter for SwcErrorBuffer {
-    fn emit(&mut self, db: &DiagnosticBuilder) {
-        self.0.write().unwrap().push((**db).clone());
-    }
-}
-
-/// Low-level utility structure with common AST parsing functions.
-///
-/// Allows to build more complicated parser by providing a callback
-/// to `parse_module`.
-pub struct AstParser {
+pub struct SWC {
     pub buffered_error: SwcErrorBuffer,
     pub source_map: Rc<SourceMap>,
     pub handler: Handler,
@@ -106,7 +82,7 @@ pub struct AstParser {
     pub(crate) top_level_mark: Mark,
 }
 
-impl AstParser {
+impl SWC {
     pub(crate) fn new() -> Self {
         let buffered_error = SwcErrorBuffer::default();
 
@@ -122,7 +98,7 @@ impl AstParser {
         let globals = Globals::new();
         let top_level_mark = swc_common::GLOBALS.set(&globals, || Mark::fresh(Mark::root()))
 
-        AstParser {
+        SWC {
             buffered_error,
             source_map: Rc::new(SourceMap::default()),
             handler,
