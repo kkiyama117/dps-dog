@@ -2,9 +2,10 @@ use futures::future::LocalBoxFuture;
 use swc_ecmascript::parser::Syntax;
 use thiserror::Error;
 
-use crate::ast_parser;
-use crate::ast_parser::SWC;
+use crate::errors::SWCDiagnosticBuffer;
+use crate::swc::SWC;
 
+#[allow(dead_code)]
 #[derive(Error, Debug)]
 pub enum DocError {
     #[error("{0}")]
@@ -12,11 +13,11 @@ pub enum DocError {
     #[error("{0}")]
     Io(std::io::Error),
     #[error("{0}")]
-    Parse(ast_parser::SwcDiagnosticBuffer),
+    Parse(SWCDiagnosticBuffer),
 }
 
-impl From<ast_parser::SwcDiagnosticBuffer> for DocError {
-    fn from(error: ast_parser::SwcDiagnosticBuffer) -> DocError {
+impl From<SWCDiagnosticBuffer> for DocError {
+    fn from(error: SWCDiagnosticBuffer) -> DocError {
         DocError::Parse(error)
     }
 }
@@ -42,18 +43,17 @@ struct Import {
     kind: ImportKind,
 }
 
-pub struct DocParser {
+/// DogParser parses scripts with SWC AST parser and tries to get info from node tree and comments
+pub struct DogParser {
     pub ast_parser: SWC,
-    pub loader: Box<dyn DocFileLoader>,
     pub private: bool,
 }
 
-impl DocParser {
-    pub fn new(loader: Box<dyn DocFileLoader>) -> Self {
-        Self {
-            ast_parser: Default::default(),
-            loader,
+impl DogParser {
+    pub fn initialize(specifier: &str, source: &str) -> Result<Self, anyhow::Error> {
+        Ok(Self {
+            ast_parser: SWC::parse(specifier, source)?,
             private: true,
-        }
+        })
     }
 }

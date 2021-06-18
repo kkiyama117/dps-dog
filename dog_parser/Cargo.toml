@@ -4,26 +4,28 @@ version = "0.1.0"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+serde = ["serde_crate", "serde_json"]
 
 [dependencies]
 anyhow = "1.0.40"
-thiserror="1.0"
+thiserror = "1.0"
 regex = "1.5"
 #semver = { version = "0.11", features = ["serde"] }
 smallvec = "1"
-futures="0.3"
+futures = "0.3"
 url = "2.2.1"
-smol_str="0.1"
+smol_str = "0.1"
 # swc
 # docs: https://swc.rs
 # crate: https://crates.io/search?q=swc
-swc= { version = "0.22", features = [] }
+swc = { version = "0.23", features = [] }
 swc_common = { version = "0.10", features = ["sourcemap"] }
 swc_atoms = "0.2.6"
-swc_ecmascript = { version = "0.36.0", features = ["parser", "transforms", "utils", "visit"] }
-swc_ecma_ast = "0.45.0"
-swc_ecma_visit = "0.31.0"
-swc_ecma_utils = "0.36.0"
+swc_ecmascript = { version = "0.39", features = ["parser", "transforms", "utils", "visit"] }
+swc_ecma_ast = "0.46"
+swc_ecma_visit = "0.32"
+swc_ecma_utils = "0.37"
 serde_crate = { package = "serde", version = "1", features = ["derive"], optional = true }
 serde_json = { version = "1", optional = true }
 

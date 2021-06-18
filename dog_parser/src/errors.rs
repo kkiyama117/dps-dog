@@ -66,3 +66,5 @@ impl SWCDiagnosticBuffer {
         Self { diagnostics }
     }
 }
+
+impl std::error::Error for SWCDiagnosticBuffer {}
