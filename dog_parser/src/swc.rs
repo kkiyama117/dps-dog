@@ -1,6 +1,7 @@
 use crate::errors::{SWCDiagnosticBuffer, SWCErrorBuffer};
 use crate::utils::Specifier;
-use std::{path::Path, rc::Rc};
+// use std::{path::Path, rc::Rc};
+use std::rc::Rc;
 use swc_common::{
     comments::SingleThreadedComments,
     errors::{Handler, HandlerFlags},
@@ -34,8 +35,10 @@ impl SWC {
     pub fn parse(specifier: &str, source: &str) -> Result<Self, SWCDiagnosticBuffer> {
         // generate source map
         let source_map = SourceMap::default();
-        let source_file = source_map.new_source_file(
-            FileName::Real(Path::new(specifier).to_path_buf()),
+        let sm = Rc::new(source_map);
+        let source_file = sm.new_source_file(
+            // FileName::Real(Path::new(specifier).to_path_buf()),
+            FileName::Custom(specifier.into()),
             source.into(),
         );
         // generate parse config
@@ -55,6 +58,7 @@ impl SWC {
                 ..Default::default()
             },
         );
+        let source_map = sm.clone();
         let module = parser.parse_module().map_err(move |err| {
             let mut diagnostic = err.into_diagnostic(&handler);
             diagnostic.emit();
@@ -69,7 +73,7 @@ impl SWC {
         Ok(Self {
             specifier: specifier.into(),
             module,
-            source_map: Rc::new(todo!()),
+            source_map: sm,
             comments: Default::default(),
             // globals: Globals::new(),
         })
@@ -88,6 +92,7 @@ pub fn get_default_ts_syntax() -> Syntax {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json;
 
     #[test]
     fn ts() {
@@ -121,6 +126,10 @@ mod tests {
         // let (code, _) = st("https://deno.land/x/mod.ts", source, false);
         // assert!(code.contains("var D;\n(function(D) {\n"));
         // assert!(code.contains("_applyDecoratedDescriptor("));
+        let tester = SWC::parse("test.ts", source).unwrap();
+        for i in tester.module.body {
+            println!("{:?}", serde_json::to_string(&i));
+        }
         assert_eq!(1 + 1, 2);
     }
 }
