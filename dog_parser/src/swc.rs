@@ -122,6 +122,9 @@ mod tests {
         @enumerable(false)
         bar() {}
       }
+      
+      // call it
+      enumerable(true);
     "#;
         // let (code, _) = st("https://deno.land/x/mod.ts", source, false);
         // assert!(code.contains("var D;\n(function(D) {\n"));
