@@ -45,14 +45,14 @@ struct Import {
 
 /// DogParser parses scripts with SWC AST parser and tries to get info from node tree and comments
 pub struct DogParser {
-    pub ast_parser: SWC,
+    pub ast_tokenizer: SWC,
     pub private: bool,
 }
 
 impl DogParser {
     pub fn initialize(specifier: &str, source: &str) -> Result<Self, anyhow::Error> {
         Ok(Self {
-            ast_parser: SWC::parse(specifier, source)?,
+            ast_tokenizer: SWC::parse(specifier, source)?,
             private: true,
         })
     }

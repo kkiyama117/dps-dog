@@ -83,8 +83,7 @@ impl SWC {
             specifier: specifier.into(),
             module,
             source_map: sm,
-            comments: Default::default(),
-            // globals: Globals::new(),
+            comments, // globals: Globals::new(),
         })
     }
 }
@@ -224,7 +223,11 @@ main(async ({ vim }) => {
         for i in tester.module.body {
             println!("{:?}", serde_json::to_string(&i));
         }
-        println!("{:?}", &tester.module.span);
-        println!("{:?}", &tester.comments);
+        let (a, b) = &tester.comments.take_all();
+        println!("{:?}", a);
+        println!("{:?}", b);
+        // for a2 in a.borrow().iter() {
+        //     println!("{:?}", a2);
+        // }
     }
 }
