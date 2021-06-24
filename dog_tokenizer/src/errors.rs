@@ -13,7 +13,7 @@ pub struct SWCErrorBuffer {
 }
 
 impl SWCErrorBuffer {
-    pub fn new(specifier: &str) -> Self {
+    pub fn new(specifier: Specifier) -> Self {
         Self {
             specifier: specifier.into(),
             diagnostics: Arc::new(RwLock::new(Vec::new())),

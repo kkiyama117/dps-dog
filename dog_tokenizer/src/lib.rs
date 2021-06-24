@@ -3,6 +3,8 @@ mod parser;
 pub mod swc;
 mod utils;
 
+use serde::Deserialize;
+
 // #[cfg(test)]
 // mod tests {
 //     #[test]
@@ -14,9 +16,8 @@ mod utils;
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Options {
-    #[serde(default)]
-    pub import_map: ImportHashMap,
-
+    // #[serde(default)]
+    // pub import_map: ImportHashMap,
     #[serde(default)]
     pub swc_options: SWCOptions,
 }
