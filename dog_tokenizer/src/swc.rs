@@ -21,9 +21,6 @@ pub struct ParseResult {
 }
 
 /// Low-level utility structure with common AST parsing functions.
-///
-/// Allows to build more complicated parser by providing a callback
-/// to `parse_module`.
 #[derive(Clone)]
 pub struct SWC {
     /// specifier identifies file.
@@ -221,7 +218,7 @@ main(async ({ vim }) => {
         assert_eq!(1 + 1, 2);
         let tester = SWC::parse("foo/bar.ts", source).unwrap();
         for i in tester.module.body {
-            println!("{:?}", serde_json::to_string(&i));
+            println!("{:?}\n", serde_json::to_string(&i));
         }
         let (a, b) = &tester.comments.take_all();
         println!("{:?}", a);

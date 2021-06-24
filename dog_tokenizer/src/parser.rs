@@ -43,17 +43,27 @@ struct Import {
     kind: ImportKind,
 }
 
-/// DogParser parses scripts with SWC AST parser and tries to get info from node tree and comments
+/// DogParser parses scripts with SWC AST parser and tries to get info
+/// from node tree and comments.
+#[derive(Clone)]
 pub struct DogParser {
-    pub ast_tokenizer: SWC,
-    pub private: bool,
+    ast_tokenizer: SWC,
+    private: bool,
 }
 
 impl DogParser {
+    /// initialize Parser
+    ///
+    /// This method may return Error, from which swc throws in generating AST of Typescript file.
     pub fn initialize(specifier: &str, source: &str) -> Result<Self, anyhow::Error> {
         Ok(Self {
             ast_tokenizer: SWC::parse(specifier, source)?,
             private: true,
         })
+    }
+
+    /// show inner parser powered by swc.
+    pub fn inner(&self) -> SWC {
+        self.ast_tokenizer.clone()
     }
 }

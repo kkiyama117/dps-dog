@@ -3,8 +3,10 @@ mod parser;
 pub mod swc;
 mod utils;
 
+#[cfg(feature = "serde")]
 use serde::Deserialize;
 
+pub fn generate_parser() {}
 // #[cfg(test)]
 // mod tests {
 //     #[test]
