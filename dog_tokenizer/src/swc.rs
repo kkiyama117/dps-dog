@@ -102,30 +102,26 @@ mod tests {
     #[test]
     fn ts() {
         let source = r#"
-// Import 'start' function from denops_std
-import { ensureString, main } from "https://deno.land/x/denops_std/mod.ts";
-import {
-  AutocmdHelper,
-} from "https://deno.land/x/denops_std@v0.14.1/vim/mod.ts";
+import { Denops } from "./vendor/https/deno.land/x/denops_std/mod.ts";
+import { execute } from "./vendor/https/deno.land/x/denops_std/helper/mod.ts";
+import * as vars from "./vendor/https/deno.land/x/denops_std/variable/mod.ts";
+import * as autocmd from "./vendor/https/deno.land/x/denops_std/autocmd/mod.ts";
+import { ensureString } from "./vendor/https/deno.land/x/unknownutil/mod.ts";
 
-// Call 'main' with async callback. The callback get RunnerContext.
-main(async ({ vim }) => {
-  // Register RPC functions with 'vim.register' like:
-  vim.register({
-    /**
-         * Developers can define multiple endpoints which take arbitrary number of arguments
-         * and return arbitrary value as a Promise.
-         * This function can be called by denops#request() or denops#notify() functions.
-         *
-         * @param where
-         */
+// Export `main` function which is executed from denops.vim
+export async function main(denops: Denops) {
+  // Register RPC functions by overwriting `dispatcher` like:
+  denops.dispatcher = {
+    // Developers can define multiple endpoints which take arbitrary number of arguments
+    // and return arbitrary value as a Promise.
+    // This function can be called by denops#request() or denops#notify() functions.
     async say(where: unknown): Promise<void> {
-      // Ensure that `prefix` is 'string' here
-      ensureString(where, "where");
+      // Ensure that `where` is `string` here
+      ensureString(where);
       // Use `call` to call Vim's function
-      const name = await vim.call("input", "Your name: ");
+      const name = await denops.call("input", "Your name: ");
       // Use `eval` to evaluate Vim's expression
-      const progname = await vim.eval("v:progname");
+      const progname = await denops.eval("v:progname");
       // Construct messages
       const messages = [
         `Hello ${where}`,
@@ -133,54 +129,64 @@ main(async ({ vim }) => {
         `This is ${progname}`,
       ];
       // Use `cmd` to execute Vim's command
-      await vim.cmd(`redraw | echomsg message`, {
+      await denops.cmd(`redraw | echomsg message`, {
         message: messages.join(". "),
       });
     },
 
     async get_variables(): Promise<void> {
-      // Use 'vim.g.get' to access global variable
-      console.log("g:denops_helloworld", await vim.g.get("denops_helloworld"));
-      // Use 'vim.b.get' to access buffer-local variable
-      console.log("b:denops_helloworld", await vim.b.get("denops_helloworld"));
-      // Use 'vim.w.get' to access window-local variable
-      console.log("w:denops_helloworld", await vim.w.get("denops_helloworld"));
-      // Use 'vim.t.get' to access tabpage-local variable
-      console.log("t:denops_helloworld", await vim.t.get("denops_helloworld"));
-      // Use 'vim.v.get' to access Vim's variable
-      console.log("v:errmsg", await vim.v.get("errmsg"));
+      // Access global variable
+      console.log(
+        "g:denops_helloworld",
+        await vars.g.get(denops, "denops_helloworld"),
+      );
+      // Access buffer-local variable
+      console.log(
+        "b:denops_helloworld",
+        await vars.b.get(denops, "denops_helloworld"),
+      );
+      // Access window-local variable
+      console.log(
+        "w:denops_helloworld",
+        await vars.w.get(denops, "denops_helloworld"),
+      );
+      // Access tabpage-local variable
+      console.log(
+        "t:denops_helloworld",
+        await vars.t.get(denops, "denops_helloworld"),
+      );
+      // Access Vim's variable
+      console.log("v:errmsg", await vars.v.get(denops, "errmsg"));
     },
 
     async set_variables(): Promise<void> {
-      // Use 'vim.g.set' to replace global variable
-      await vim.g.set("denops_helloworld", "Global HOGEHOGE");
-      // Use 'vim.b.set' to replace buffer-local variable
-      await vim.b.set("denops_helloworld", "Buffer HOGEHOGE");
-      // Use 'vim.w.set' to replace window-local variable
-      await vim.w.set("denops_helloworld", "Window HOGEHOGE");
-      // Use 'vim.t.set' to replace tabpage-local variable
-      await vim.t.set("denops_helloworld", "Tabpage HOGEHOGE");
-      // Use 'vim.v.set' to replace Vim's variable
-      await vim.v.set("errmsg", "Vim HOGEHOGE");
+      // Replace global variable
+      await vars.g.set(denops, "denops_helloworld", "Global HOGEHOGE");
+      // Replace buffer-local variable
+      await vars.b.set(denops, "denops_helloworld", "Buffer HOGEHOGE");
+      // Replace window-local variable
+      await vars.w.set(denops, "denops_helloworld", "Window HOGEHOGE");
+      // Replace tabpage-local variable
+      await vars.t.set(denops, "denops_helloworld", "Tabpage HOGEHOGE");
+      // Replace Vim's variable
+      await vars.v.set(denops, "errmsg", "Vim HOGEHOGE");
     },
 
     async remove_variables(): Promise<void> {
-      // Use 'vim.g.remove' to remove global variable
-      await vim.g.remove("denops_helloworld");
-      // Use 'vim.b.remove' to remove buffer-local variable
-      await vim.b.remove("denops_helloworld");
-      // Use 'vim.w.remove' to remove window-local variable
-      await vim.w.remove("denops_helloworld");
-      // Use 'vim.t.remove' to remove tabpage-local variable
-      await vim.t.remove("denops_helloworld");
-      // Use 'vim.v.remove' to remove Vim variable
-      await vim.v.remove("errmsg");
+      // Remove global variable
+      await vars.g.remove(denops, "denops_helloworld");
+      // Remove buffer-local variable
+      await vars.b.remove(denops, "denops_helloworld");
+      // Remove window-local variable
+      await vars.w.remove(denops, "denops_helloworld");
+      // Remove tabpage-local variable
+      await vars.t.remove(denops, "denops_helloworld");
     },
 
     async register_autocmd(): Promise<void> {
-      await vim.cmd("new");
-      // Use 'vim.autocmd' to register autocmd
-      await vim.autocmd("denops_helloworld", (helper: AutocmdHelper) => {
+      await denops.cmd("new");
+      // Register autocmd
+      await autocmd.group(denops, "denops_helloworld", (helper) => {
         // Use 'helper.remove()' to remove autocmd
         helper.remove("*", "<buffer>");
         // Use 'helper.define()' to define autocmd
@@ -196,21 +202,17 @@ main(async ({ vim }) => {
         );
       });
     },
-  });
+  };
 
-  // Use 'vim.execute()' to execute Vim script
-  /// [Denops]
-  /// Adds x and y.
-  ///  @param {number} x
-  ///  @param {number} y
-  ///  @returns {number} x と y の加算
-  await vim.execute(`
-    command! HelloWorld call denops#notify("${vim.name}", "say", ["World"])
-    command! HelloDenops call denops#notify("${vim.name}", "say", ["Denops"])
-  `);
-
-  console.log("denops-helloworld.vim (std) has loaded");
-});
+  // Use 'execute()' to execute multiline Vim script
+  await execute(
+    denops,
+    `
+    command! HelloWorld call denops#notify("${denops.name}", "say", ["World"])
+    command! HelloDenops call denops#notify("${denops.name}", "say", ["Denops"])
+    `,
+  );
+}
     "#;
         // let (code, _) = st("https://deno.land/x/mod.ts", source, false);
         // assert!(code.contains("var D;\n(function(D) {\n"));
