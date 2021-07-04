@@ -1,5 +1,5 @@
 [workspace]
-members = ["swc_vimdoc", "dog_tokenizer", "denops_types"]
+members = ["swc_vimdoc", "dog_parser", ]
 
 [package]
 name = "dps_dog"

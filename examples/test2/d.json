@@ -1,0 +1,44 @@
+{
+  "type": "ImportDeclaration",
+  "span": {
+    "start": 230,
+    "end": 310,
+    "ctxt": 0
+  },
+  "specifiers": [
+    {
+      "type": "ImportNamespaceSpecifier",
+      "span": {
+        "start": 237,
+        "end": 249,
+        "ctxt": 0
+      },
+      "local": {
+        "type": "Identifier",
+        "span": {
+          "start": 242,
+          "end": 249,
+          "ctxt": 0
+        },
+        "value": "autocmd",
+        "optional": false
+      }
+    }
+  ],
+  "source": {
+    "type": "StringLiteral",
+    "span": {
+      "start": 255,
+      "end": 309,
+      "ctxt": 0
+    },
+    "value": "./vendor/https/deno.land/x/denops_std/autocmd/mod.ts",
+    "hasEscape": false,
+    "kind": {
+      "type": "normal",
+      "containsQuote": true
+    }
+  },
+  "typeOnly": false,
+  "asserts": null
+}

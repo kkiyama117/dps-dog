@@ -1,0 +1,45 @@
+{
+  "type": "ImportDeclaration",
+  "span": {
+    "start": 72,
+    "end": 150,
+    "ctxt": 0
+  },
+  "specifiers": [
+    {
+      "type": "ImportSpecifier",
+      "span": {
+        "start": 81,
+        "end": 88,
+        "ctxt": 0
+      },
+      "local": {
+        "type": "Identifier",
+        "span": {
+          "start": 81,
+          "end": 88,
+          "ctxt": 0
+        },
+        "value": "execute",
+        "optional": false
+      },
+      "imported": null
+    }
+  ],
+  "source": {
+    "type": "StringLiteral",
+    "span": {
+      "start": 96,
+      "end": 149,
+      "ctxt": 0
+    },
+    "value": "./vendor/https/deno.land/x/denops_std/helper/mod.ts",
+    "hasEscape": false,
+    "kind": {
+      "type": "normal",
+      "containsQuote": true
+    }
+  },
+  "typeOnly": false,
+  "asserts": null
+}

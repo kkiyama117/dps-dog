@@ -22,25 +22,13 @@ impl From<SWCDiagnosticBuffer> for DocError {
     }
 }
 
-pub trait DocFileLoader {
+pub trait DocFIleLoader {
     fn resolve(&self, specifier: &str, referrer: &str) -> Result<String, DocError>;
 
     fn load_source_code(
         &self,
         specifier: &str,
     ) -> LocalBoxFuture<Result<(Syntax, String), DocError>>;
-}
-
-#[derive(Clone)]
-enum ImportKind {
-    Namespace(String),
-    Named(String, Option<String>),
-}
-
-#[derive(Clone)]
-struct Import {
-    src: String,
-    kind: ImportKind,
 }
 
 /// DogParser parses scripts with SWC AST parser and tries to get info
@@ -65,5 +53,10 @@ impl DogParser {
     /// show inner parser powered by swc.
     pub fn inner(&self) -> SWC {
         self.ast_tokenizer.clone()
+    }
+    pub fn try_parse(&self) {
+        for i in self.ast_tokenizer.clone().module.body {
+            println!("{}\n", serde_json::to_string(&i).unwrap());
+        }
     }
 }

@@ -1,0 +1,45 @@
+{
+  "type": "ImportDeclaration",
+  "span": {
+    "start": 311,
+    "end": 388,
+    "ctxt": 0
+  },
+  "specifiers": [
+    {
+      "type": "ImportSpecifier",
+      "span": {
+        "start": 320,
+        "end": 332,
+        "ctxt": 0
+      },
+      "local": {
+        "type": "Identifier",
+        "span": {
+          "start": 320,
+          "end": 332,
+          "ctxt": 0
+        },
+        "value": "ensureString",
+        "optional": false
+      },
+      "imported": null
+    }
+  ],
+  "source": {
+    "type": "StringLiteral",
+    "span": {
+      "start": 340,
+      "end": 387,
+      "ctxt": 0
+    },
+    "value": "./vendor/https/deno.land/x/unknownutil/mod.ts",
+    "hasEscape": false,
+    "kind": {
+      "type": "normal",
+      "containsQuote": true
+    }
+  },
+  "typeOnly": false,
+  "asserts": null
+}

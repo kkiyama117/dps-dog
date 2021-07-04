@@ -28,7 +28,7 @@ pub struct SWC {
     pub module: Module,
     /// Source map contains data of file.
     pub source_map: Rc<SourceMap>,
-    /// Comments are collected.
+    /// Collected comments.
     pub comments: SingleThreadedComments,
     // pub buffered_error: SwcErrorBuffer,
     // pub handler: Handler,
@@ -218,13 +218,13 @@ export async function main(denops: Denops) {
         // assert!(code.contains("var D;\n(function(D) {\n"));
         // assert!(code.contains("_applyDecoratedDescriptor("));
         assert_eq!(1 + 1, 2);
-        let tester = SWC::parse("foo/bar.ts", source).unwrap();
-        for i in tester.module.body {
-            println!("{:?}\n", serde_json::to_string(&i));
-        }
-        let (a, b) = &tester.comments.take_all();
-        println!("{:?}", a);
-        println!("{:?}", b);
+        // let tester = SWC::parse("foo/bar.ts", source).unwrap();
+        // for i in tester.module.body {
+        //     println!("{:?}\n", serde_json::to_string(&i));
+        // }
+        // let (a, b) = &tester.comments.take_all();
+        // println!("{:?}", a);
+        // println!("{:?}", b);
         // for a2 in a.borrow().iter() {
         //     println!("{:?}", a2);
         // }

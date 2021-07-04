@@ -1,3 +1,20 @@
+pub mod errors;
+mod parser;
+mod swc;
+mod swc_parser;
+mod utils;
+
+#[cfg(feature = "serde")]
+use serde::Deserialize;
+
+pub fn generate_parser() {}
+#[cfg(test)]
+mod tests {
+    use crate::parser::DogParser;
+
+    #[test]
+    fn it_works() {
+        let source = r#"
 import { Denops } from "./vendor/https/deno.land/x/denops_std/mod.ts";
 import { execute } from "./vendor/https/deno.land/x/denops_std/helper/mod.ts";
 import * as vars from "./vendor/https/deno.land/x/denops_std/variable/mod.ts";
@@ -33,23 +50,23 @@ export async function main(denops: Denops) {
     async get_variables(): Promise<void> {
       // Access global variable
       console.log(
-          "g:denops_helloworld",
-          await vars.g.get(denops, "denops_helloworld"),
+        "g:denops_helloworld",
+        await vars.g.get(denops, "denops_helloworld"),
       );
       // Access buffer-local variable
       console.log(
-          "b:denops_helloworld",
-          await vars.b.get(denops, "denops_helloworld"),
+        "b:denops_helloworld",
+        await vars.b.get(denops, "denops_helloworld"),
       );
       // Access window-local variable
       console.log(
-          "w:denops_helloworld",
-          await vars.w.get(denops, "denops_helloworld"),
+        "w:denops_helloworld",
+        await vars.w.get(denops, "denops_helloworld"),
       );
       // Access tabpage-local variable
       console.log(
-          "t:denops_helloworld",
-          await vars.t.get(denops, "denops_helloworld"),
+        "t:denops_helloworld",
+        await vars.t.get(denops, "denops_helloworld"),
       );
       // Access Vim's variable
       console.log("v:errmsg", await vars.v.get(denops, "errmsg"));
@@ -87,14 +104,14 @@ export async function main(denops: Denops) {
         helper.remove("*", "<buffer>");
         // Use 'helper.define()' to define autocmd
         helper.define(
-            "CursorHold",
-            "<buffer>",
-            "echomsg 'Hello Denops CursorHold'",
+          "CursorHold",
+          "<buffer>",
+          "echomsg 'Hello Denops CursorHold'",
         );
         helper.define(
-            ["BufEnter", "BufLeave"],
-            "<buffer>",
-            "echomsg 'Hello Denops BufEnter/BufLeave'",
+          ["BufEnter", "BufLeave"],
+          "<buffer>",
+          "echomsg 'Hello Denops BufEnter/BufLeave'",
         );
       });
     },
@@ -108,4 +125,31 @@ export async function main(denops: Denops) {
     command! HelloDenops call denops#notify("${denops.name}", "say", ["Denops"])
     `,
   );
+}
+    "#;
+        DogParser::initialize("denops-helloworld", source)
+            .unwrap()
+            .try_parse();
+    }
+}
+#[cfg(feature = "serde")]
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct Options {
+    // #[serde(default)]
+    // pub import_map: ImportHashMap,
+    #[serde(default)]
+    pub swc_options: SWCOptions,
+}
+
+#[cfg(feature = "serde")]
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct SWCOptions {}
+
+#[cfg(feature = "serde")]
+impl Default for SWCOptions {
+    fn default() -> Self {
+        SWCOptions {}
+    }
 }
