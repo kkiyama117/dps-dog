@@ -1,7 +1,5 @@
 import { Denops } from "https://deno.land/x/denops_std@v1.0.0-beta.0/mod.ts";
 import { execute } from "https://deno.land/x/denops_std@v1.0.0-beta.0/helper/mod.ts";
-import * as vars from "https://deno.land/x/denops_std@v1.0.0-beta.0/variable/mod.ts";
-import * as autocmd from "https://deno.land/x/denops_std@v1.0.0-beta.0/autocmd/mod.ts";
 import { ensureString } from "https://deno.land/x/unknownutil@v0.1.1/mod.ts";
 import { run } from "./swc.ts";
 
