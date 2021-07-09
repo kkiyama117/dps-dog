@@ -10,6 +10,8 @@ import {
   isModuleDeclarations,
 } from "./jadge.ts";
 
+import { assert } from "https://deno.land/std@0.100.0/testing/asserts.ts";
+
 // {
 //   type: "Module",
 //   span: { start: 0, end: 36, ctxt: 0 },
@@ -45,8 +47,6 @@ function getDenopsInstance(code: string) {
     .filter(isDenopsMainFunc);
   return denopsMains;
 }
-
-import { assert } from "https://deno.land/std/testing/asserts.ts";
 
 Deno.test("getDenopsInstance", async () => {
   const text = await (await fetch(
