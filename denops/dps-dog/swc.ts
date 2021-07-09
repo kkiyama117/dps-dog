@@ -26,7 +26,7 @@ import {
 // }
 //
 export function run(text: string) {
-  console.log(getDenopsInstance(text));
+  return getDenopsInstance(text);
 }
 
 function getDenopsInstance(code: string) {
@@ -46,5 +46,11 @@ function getDenopsInstance(code: string) {
   return denopsMains;
 }
 
-const text = await Deno.readTextFile("./denops/dps-dog/main.ts");
-run(text);
+import { assert } from "https://deno.land/std/testing/asserts.ts";
+
+Deno.test("getDenopsInstance", async () => {
+  const text = await (await fetch("https://raw.githubusercontent.com/vim-denops/denops-helloworld.vim/main/denops/helloworld/main.ts")).text();
+  // const text = await Deno.readTextFile("./denops/dps-dog/main.ts");
+  console.log(getDenopsInstance(text));
+  assert(true);
+});
